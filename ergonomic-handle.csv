@@ -1,0 +1,9 @@
+exported_filename,bottomcapext,bottomcapscale,fingergroove,flair,fn,groovedepth,groovespc,halfrotate,hand_length,hand_width,metacarpal_expansion,tiltangle,topext
+design default values,6,0.3,true,true,64,0.6,8,false,186,85,1.12,110,0
+design_larger_handle,8,0.35,false,true,128,0.8,10,false,190,90,1.13,105,5
+design_no_flair,5,0.25,true,false,64,0.5,7,true,180,80,1.10,115,0
+design_extra_groovedepth,7,0.3,true,true,64,1.0,9,false,185,85,1.14,110,0
+design_half_rotated,6,0.3,true,true,64,0.6,8,true,186,85,1.12,110,0
+design_shallow_groovedepth,6,0.3,true,true,64,0.4,8,false,186,85,1.11,110,0
+design_high_tiltangle,6,0.3,true,true,64,0.6,8,false,186,85,1.12,120,0
+design_extended_top,6,0.3,true,true,64,0.6,8,false,186,85,1.12,110,10
