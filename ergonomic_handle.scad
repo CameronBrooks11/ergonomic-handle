@@ -1,110 +1,25 @@
 /*
-Ergonomic handle
-by Alex Matulich
-Verson 5.1, May 2022
+ * Ergonomic handle
+ * by Alex Matulich
+ * Verson 5.1, May 2022
+ *
+ * Revised and uploaded to GitHub for continued development as well as reference and visibility on December 5th, 2024.
+ *
+ */
 
-Revised and uploaded to GitHub for reference and visibility on December 5th, 2024.
-
-On Thingiverse: https://www.thingiverse.com/thing:5330170
-On Printables: https://www.printables.com/model/154837
-
-An ergonomic handle distributes the hand contact pressure as evenly as possible.
-
-The dimensions in this model are based on several research papers using anthropometric data from various populations
-around the world. The handle profile is based on a 2020 study in which gripping hands were measured with a contour gauge
-to derive the correct curves for an ergonomic handle.
-
-All of these studies are cited and linked in my blog article "[Whose hands are biggest? You may be
-surprised.](https://www.nablu.com/2022/03/whose-hands-are-biggest-you-may-be.html)"
-
-I expanded on the handle contour study by generalizing it to be scalable to any size of hand. Knowing that the handle
-height is based on metacarpal breadth (hand width) and the handle cross section sizes are based on hand length, one can
-generate vertical and horizontal scale factors for the curve control points given in the study, and thereby obtain a
-handle scaled correctly to any size hand.
-
-If you want a longer handle, then specify a bigger hand width. If you want a thicker handle, specify a longer hand
-length.
-
-Updated April 2022 to include finger grooves, for more evenly distributed contact pressure on fingers when pulling on
-the handle. Updated May 2022 to remove top-most ridge in finger grooves, unnecessary for thumb.
-
-USAGE:
-Place this in a searchable location, like the same directory as your script, and near the top, put this line:
-
-use <ergonomic_handle.scad>
-
-Modules are as follows:
-
-------------------------------------
-ergonomic_handle(hand_length=185, hand_width=86, flair=true, bottomcapext=0, topext=0, groovespc=0, tiltangle=110,
-fn=64, halfrotate=false);
-
-Renders the body of an ergonimic handle. The handle is oriented so that the top surface is centered at the origin.
-Parameters:
- hand_length = length of hand from tip of middle finger to first crease on wrist. Defaults to default_hand_length()
-setting below. hand_width = metacarpal breadth; width of the four fingers where they meet the palm. Defaults to
-default_hand_width() setting below. flair = true to flare out the top and bottom of front edge, for better pull force.
-When flare=false, the handle is generated as described in the referenced study. Defaults to true. bottomcapext =
-bottom cap extension. 0=flat bottom (default). Suggest values 3 to 8. topext = top extension, curves extrapolated upward
-by this amount. 0=no extension (default). The extension extends above the origin. groovespc = groove spacing for
-improved grip. 0=none (default, or if fingergroove=true). Suggest 6-10 mm spacing. Grooves are 1.2 mm wide and 0.6 mm
-deep. fingergroove = finger grooves. false=no finger grooves (default). true=include (this disables groovespc). WARNING:
-Enabling this setting causes the handle to fit ONLY the hand for which it is sized! The grooves are un-ergonomic and
-uncomfortable when the handle size doesn't match the hand. tiltangle = handle tilt angle. 110° (default) recommended.
-Should be no less than 90. fn = number of facets (default 64) in elliptical cross section as well as vertical slices.
-Vertical slices are always 128 if fingergroove=true. halfrotate = whether to rotate polygon vertices half of a segment
-around the ellipse (default false). Useful only for overlapping two low-poly handles for interesting textures (see
-demo).
-
-------------------------------------
-ergonomic_handle_top_ellipse(hand_length, hand_width, topext, tiltangle, fn);
-
-Returns a polygon corresponding to the top surface of the handle (including extension).
-Parameters are the same as described above. All have defaults if omitted.
-
-------------------------------------
-ergonomic_handle_bottom_ellipse(hand_length, hand_width, tiltangle, fn);
-
-Returns a polygon corresponding to the bottom surface of the handle (excluding bottom cap extension). Useful when not
-using a bottom cap and you want to match something with the bottom of the handle. Parameters are the same as described
-above. All have defaults if omitted.
-
-In addition, ergonomic_handle_height(hand_width, metacarpal_expansion) may be used to get the height of the basic handle
-body without extensions. This is the same as hand_width * metacarpal_expansion.
-
-The handle is rendered with the top center at origin. The bottom of the handle (excluding extension cap) is
-ergonomic_handle_height() below the origin.
-*/
-
-// ---------- default parameters (overridden in module arguments) ----------
-
-/*
-These hand dimensions (186, 85) were calculated from data found in various journal articles, broken down by nationality:
-Bangladeshi, Czech, Filipino, German, central Indian, East Indian, Iranian, Korean, Jordanian, Mexican, Taiwanese,
-Turkish, and Vietnamese. The average male hand length is 186 mm (range 173-198) and breadth is 85 mm (range 78-98). The
-average female hand length is 170 mm (range 161-180) and breadth is 76 mm (range 68-92). Using the average male size
-should also cover nearly all adult females and all children.
-
-Of the data available about nationalities, when plotted by hand area (length x width) the populations sort themselves
-into three obvious groups that have similar hand sizes. Vietnamese and Indian females have the smallest hands, followed
-closely by Turkish and Bangladeshi females. Filipino males seem to be an outlier with the largest hands. Other than
-Filipino males, the group with the largest hands includes Czech, Iranian, Jordanian, Turkish, and German males, as well
-as Filipino females.
-*/
-
-hand_length = 186; // Default hand length for scaling (mm)
-hand_width = 85;   // Default metacarpal breadth (mm)
+hand_length = 186;           // Default hand length for scaling (mm)
+hand_width = 85;             // Default metacarpal breadth (mm)
 metacarpal_expansion = 1.12; // Typical metacarpal breadth expansion in grip position (10%-15%)
-flair = true; // Enable top/bottom flaring for enhanced pull force
-fingergroove = true; // Add grooves for finger-specific ergonomic fit
-groovespc = 8; // Spacing between grooves (mm)
-groovedepth = 0.6; // Depth of grooves for grip (mm)
-tiltangle = 110; // Tilt angle of the handle (degrees)
-topext = 0; // No top extension added
-bottomcapext = 6; // Bottom cap extended by 6 mm
-bottomcapscale = 0.3; // Bottom cap scaled to 30% of the handle cross-section
-fn = 64; // Number of facets for ellipses
-halfrotate = false; // No half-rotation of polygon vertices
+flair = true;                // Enable top/bottom flaring for enhanced pull force
+fingergroove = true;         // Add grooves for finger-specific ergonomic fit
+groovespc = 8;               // Spacing between grooves (mm)
+groovedepth = 0.6;           // Depth of grooves for grip (mm)
+tiltangle = 110;             // Tilt angle of the handle (degrees)
+topext = 0;                  // No top extension added
+bottomcapext = 6;            // Bottom cap extended by 6 mm
+bottomcapscale = 0.3;        // Bottom cap scaled to 30% of the handle cross-section
+fn = 64;                     // Number of facets for ellipses
+halfrotate = false;          // No half-rotation of polygon vertices
 
 // Generate the ergonomic handle with the defined parameters
 ergonomic_handle(hand_length = hand_length, hand_width = hand_width, metacarpal_expansion = metacarpal_expansion,
@@ -112,10 +27,16 @@ ergonomic_handle(hand_length = hand_length, hand_width = hand_width, metacarpal_
                  tiltangle = tiltangle, topext = topext, bottomcapext = bottomcapext, bottomcapscale = bottomcapscale,
                  fn = fn, halfrotate = halfrotate);
 
-module dummy() {} // Dummy module to stop customizer from picking up internal variables
+// Dummy module to stop customizer from picking up internal variables
+module dummy()
+{
+}
+
+// -------------------------------
+// ---------- constants ----------
+// -------------------------------
 
 // Handle curve coefficients
-
 ehandle_coeff_default = [   // coefficents for default handle based on all test subjects
 
     // curve E (forward profile)
@@ -150,10 +71,30 @@ ehandle_coeff_fwdflair = [  // coefficients for handle with forward profile flar
      ehandle_coeff_default[2]
 ];
 
+// trochoid finger groove parameters
+// finger width porportions from anthropometric data
+thumbfrac = 0.231959853553746;      // thumb fraction of hand width
+forefingerfrac = 0.200542328752527; // forefinger fraction of hand width
+
+/* 0.261856394119384, 0.262553059392204, 0.251706774167261, 0.22388377232115,0.22388377232115
+four fingers only - doesn't work well */
+fingwidfrac = [
+    // thumb plus four fingers
+    0.5 * (thumbfrac + forefingerfrac),
+    0.5 * (thumbfrac + forefingerfrac), // split total width of thumb+forefinger
+    0.201238475943949,                  // middle finger
+    0.193454805146993,                  // ring finger
+    0.172804536602786,                  // pinky
+    0.172804536602786                   // copy pinky to avoid array index overrun in trochoid()
+];
+
+trochoid_amp = 0.65; // trochoid amplitude, must be between 0.5 and 0.9
+
+// -----------------------------
 // ---------- modules ----------
+// -----------------------------
 
 // render the handle
-
 module ergonomic_handle(hand_length = default_hand_length(), hand_width = default_hand_width(), flair = true,
                         bottomcapext = 0, topext = 0, groovespc = 0, fingergroove = false, tiltangle = 110, fn = 64,
                         halfrotate = false, metacarpal_expansion = 1.12, groovedepth = 0.6, bottomcapscale = 0.3)
@@ -232,7 +173,6 @@ module ergonomic_handle(hand_length = default_hand_length(), hand_width = defaul
 // Build a polyhedron object from a stack of polygons. It is assumed that each polygon has [x,y,z] coordinates as its
 // vertices, and the ordering of vertices follows the right-hand-rule with respect to the direction of propagation of
 // each successive polygon.
-
 module polyhedron_stack(stack)
 {
     nz = len(stack);    // number of z layers
@@ -247,7 +187,6 @@ module polyhedron_stack(stack)
 }
 
 // return polygon of top ellipse (including extension)
-
 module ergonomic_handle_top_ellipse(hand_length = default_hand_length(), hand_width = default_hand_width(),
                                     metacarpal_expansion = 1.12, flair = true, fingergroove = true, topext = 0,
                                     tiltangle = 110, fn = 64, halfrotate = false)
@@ -262,7 +201,6 @@ module ergonomic_handle_top_ellipse(hand_length = default_hand_length(), hand_wi
 }
 
 // return polygon of bottom ellipse (EXCLUDING bottom cap extension)
-
 module ergonomic_handle_bottom_ellipse(hand_length = default_hand_length(), hand_width = default_hand_width(),
                                        metacarpal_expansion = 1.12, flair = true, fingergroove = true, tiltangle = 110,
                                        fn = 64, halfrotate = false)
@@ -276,27 +214,25 @@ module ergonomic_handle_bottom_ellipse(hand_length = default_hand_length(), hand
     polygon(points = p2d);
 }
 
+// -------------------------------
 // ---------- functions ----------
+// -------------------------------
 
 // default gender-based hand dimensions
-
 function default_hand_length(female = false) = female ? 171 : 186;
 function default_hand_width(female = false) = female ? 76 : 85;
 
 // height of handle without extensions
-
 function ergonomic_handle_height(hand_width = default_hand_width(),
                                  metacarpal_expansion) = hand_width * metacarpal_expansion;
 
 // polynomial evaluation at x, given any number of coefficents c[0]...c[degree]
 // usage: y = polynomial(coefficients, x);
-
 function polynomial(cof, x, sum = 0, indx = undef) = let(i = indx == undef ? len(cof) - 1 : indx) i == 0
                                                          ? cof[0] + sum
                                                          : polynomial(cof, x, x *(sum + cof[i]), i - 1);
 
 // elliptical cross section of handle at elevation z
-
 function elev_ellipse(xmin, xmax, ymax, z, tiltangle, fn = 64, fwd_ext = 0, halfrotate = false) =
     let(semimajor = 0.5 * (xmax + xmin), fwd_semimajor = semimajor + fwd_ext, yscl = ymax / semimajor,
         hr = halfrotate ? 0 : 180 / fn,
@@ -305,29 +241,11 @@ function elev_ellipse(xmin, xmax, ymax, z, tiltangle, fn = 64, fwd_ext = 0, half
                           for (a = [90 + hr:360 / fn:269.9])[semimajor * cos(a) + xoff, yscl *semimajor *sin(a), z]];
 
 // flatten an array of arrays
-
 function flatten(l) = [for (a = l) for (b = a) b];
 
+// ----------------------------------
 // trochoid finger groove functions
-
-// finger width porportions from anthropometric data
-thumbfrac = 0.231959853553746;      // thumb fraction of hand width
-forefingerfrac = 0.200542328752527; // forefinger fraction of hand width
-fingwidfrac = [
-    /* 0.261856394119384, 0.262553059392204, 0.251706774167261, 0.22388377232115,0.22388377232115 // four fingers only -
-       doesn't work well */
-
-    // thumb plus four fingers
-    0.5 * (thumbfrac + forefingerfrac),
-    0.5 * (thumbfrac + forefingerfrac), // split total width of thumb+forefinger
-    0.201238475943949,                  // middle finger
-    0.193454805146993,                  // ring finger
-    0.172804536602786,                  // pinky
-    0.172804536602786                   // copy pinky to avoid array index overrun in trochoid()
-];
-echo(fingwidfrac);
-
-trochoid_amp = 0.65; // trochoid amplitude, must be between 0.5 and 0.9
+// ----------------------------------
 
 // finger grooves are four trochoids of different sizes blended together end-to-end
 function trochoid(z_elev,
@@ -360,5 +278,3 @@ function findtrochtheta(z, r, b, theta = PI,
                                          n >= 8
                                      ? newtheta
                                      : findtrochtheta(z, r, b, newtheta, n + 1);
-
-// color("blue") polygon(points=[ for(z=[0:0.1:100]) [ z, trochoid(z, 100) ], [100, 0], [0,0] ]);

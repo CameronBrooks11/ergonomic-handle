@@ -1,20 +1,5 @@
 {
     "parameterSets": {
-        "design default values": {
-            "bottomcapext": 6,
-            "bottomcapscale": 0.3,
-            "fingergroove": true,
-            "flair": true,
-            "fn": 64,
-            "groovedepth": 0.6,
-            "groovespc": 8,
-            "halfrotate": false,
-            "hand_length": 186,
-            "hand_width": 85,
-            "metacarpal_expansion": 1.12,
-            "tiltangle": 110,
-            "topext": 0
-        },
         "design_larger_handle": {
             "bottomcapext": 8,
             "bottomcapscale": 0.35,

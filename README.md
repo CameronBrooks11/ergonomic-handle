@@ -4,6 +4,8 @@ This is an OpenSCAD library to generate an ergonomic handle that distributes han
 
 <img src="assets/erginomic_handle_v5_display.png" alt="Ergonomic Handle V5 Render" width="600">
 
+A further development of "Ergonomic handle based on scientific study": [Thingiverse](https://www.thingiverse.com/thing:5330170) and [Printables](https://www.printables.com/model/154837).
+
 ## Summary
 
 The Ergonomic Handle Library is an OpenSCAD library designed to generate ergonomic handles that distribute hand contact pressure as evenly as possible. This library leverages anthropometric data from various populations worldwide to create handles that are both comfortable and scalable to different hand sizes.
@@ -18,17 +20,9 @@ The Ergonomic Handle Library is an OpenSCAD library designed to generate ergonom
 - **Ergonomic**: Designed to distribute pressure evenly across the hand, reducing strain during use.
 - **Open Source**: Licensed under Creative Commons - Attribution, allowing for modification and sharing.
 
-## Usage
-
-To use the Ergonomic Handle Library in your OpenSCAD project, follow these steps:
-
-1. **Download the Library**: Ensure you have the `ergonomic_handle.scad` file.
-2. **Include the Library**: Place the library file in a searchable location, such as the same directory as your script.
-3. **Import the Library**: Add the following line near the top of your OpenSCAD script:
-```use <ergonomic_handle.scad>```
-4. **Generate the Handle**: Utilize the `ergonomic_handle` module with your desired parameters.
-
 ## Modules and Parameters
+
+For detailed information on the design see [design details](details.md)!
 
 ### `ergonomic_handle`
 
@@ -51,12 +45,6 @@ Renders the body of an ergonomic handle, centered at the origin.
 - `metacarpal_expansion` (default: 1.12): Expands metacarpal breadth in gripping position. **Range:** 1.10–1.15.
 - `groovedepth` (default: 0.6): Depth of grooves, used for creating textured grip.
 - `bottomcapscale` (default: 0.3): Scale factor for the bottom-most disc of the handle's base cap.
-
-### Supporting Modules
-
-- **`ergonomic_handle_top_ellipse`**: Returns a polygon corresponding to the top surface of the handle, including any extensions.
-- **`ergonomic_handle_bottom_ellipse`**: Returns a polygon corresponding to the bottom surface of the handle, excluding any bottom cap extensions.
-- **`ergonomic_handle_height`**: Calculates the height of the basic handle body without extensions based on hand width.
 
 ## Print Settings
 
@@ -85,9 +73,3 @@ This project is based on the work of **Alex Matulich**, originally posted on [Th
 <img src="assets/erginomic_handle_v5_darius_alex.png" alt="Ergonomic Handle Design" width="400">
 
 For more designs and information, visit Alex's [Thingiverse page](https://www.thingiverse.com/thing:5330170) or his [blog](https://www.nablu.com/2022/03/whose-hands-are-biggest-you-may-be.html).
-
-## Where to Find This Design
-
-The OpenSCAD model for this ergonomic handle is available on [Thingiverse](https://www.thingiverse.com/thing:5330170) and [Printables](https://www.printables.com/model/154837).
-
----
