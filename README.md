@@ -1,75 +1,129 @@
 # Ergonomic Handle
 
-This is an OpenSCAD library to generate an ergonomic handle that distributes hand contact pressure as evenly as possible.
+An OpenSCAD library that generates an ergonomic handle, one that spreads hand
+contact pressure as evenly as possible, scaled to any hand size.
 
-<img src="assets/erginomic_handle_v5_display.png" alt="Ergonomic Handle V5 Render" width="600">
+<img src="assets/ergonomic_handle_v5_display.png" alt="Ergonomic Handle V5 Render" width="600">
 
-A further development of "Ergonomic handle based on scientific study": [Thingiverse](https://www.thingiverse.com/thing:5330170) and [Printables](https://www.printables.com/model/154837).
+It continues Alex Matulich's "Ergonomic handle based on scientific study"
+([Thingiverse](https://www.thingiverse.com/thing:5330170),
+[Printables](https://www.printables.com/model/154837)).
 
-## Summary
+## Basis
 
-The Ergonomic Handle Library is an OpenSCAD library designed to generate ergonomic handles that distribute hand contact pressure as evenly as possible. This library leverages anthropometric data from various populations worldwide to create handles that are both comfortable and scalable to different hand sizes.
+The dimensions come from several research papers using anthropometric data
+from populations around the world. The profile comes from a 2020 study in
+which gripping hands were measured with a contour gauge to derive the curves
+of an ergonomic handle. The studies are cited and linked in Alex's article
+"[Whose hands are biggest? You may be surprised.](https://www.nablu.com/2022/03/whose-hands-are-biggest-you-may-be.html)"
 
-<img src="assets/erginomic_handle_v5_grooved-printed.png" alt="3D Printed Grooved Handle" width="400">
+The contour study is generalised to any hand: the handle's height follows
+metacarpal breadth (hand width) and its cross-sections follow hand length, so
+the study's curve control points can be scaled vertically and horizontally to
+fit.
 
-## Features
+<img src="assets/ergonomic_handle_v5_grooved-printed.png" alt="3D Printed Grooved Handle" width="400">
 
-- **Scientific Design**: Based on multiple research studies using anthropometric data.
-- **Scalable**: Handles can be adjusted to fit any hand size by specifying hand length and width.
-- **Customizable**: Various parameters allow for modifications such as finger grooves and handle extensions.
-- **Ergonomic**: Designed to distribute pressure evenly across the hand, reducing strain during use.
-- **Open Source**: Licensed under Creative Commons - Attribution, allowing for modification and sharing.
+## Usage
 
-## Modules and Parameters
+Put `ergonomic_handle.scad` where your script can find it, such as beside it:
 
-For detailed information on the design see [design details](details.md)!
+```openscad
+use <ergonomic_handle.scad>
 
-### `ergonomic_handle`
+ergonomic_handle(hand_length = 178, hand_width = 79.4, bottomcapext = 6, groovespc = 6);
+```
 
-Renders the body of an ergonomic handle, centered at the origin.
+Opening `ergonomic_handle.scad` itself shows a handle driven by the
+customizer; `ergonomic_handle.json` holds presets for it, and
+`ergonomic_handle.csv` lists the same designs one per row for batch export.
 
-<img src="assets/erginomic_handle_v5_scad.png" alt="OpenSCAD Render" width="400">
+## Modules
 
-**Parameters:**
+### `ergonomic_handle(...)`
 
-- `hand_length` (default: 186): Length of the hand from the tip of the middle finger to the first crease on the wrist, in millimeters.
-- `hand_width` (default: 85): Metacarpal breadth; width of the four fingers where they meet the palm, in millimeters.
-- `flair` (default: true): Flare out the top and bottom of the front edge for better pull force.
-- `bottomcapext` (default: 0): Bottom cap extension. Suggested values: 3 to 8.
-- `topext` (default: 0): Top extension, curves extrapolated upward by this amount.
-- `groovespc` (default: 0): Groove spacing for improved grip. Suggested spacing: 6-10 mm.
-- `fingergroove` (default: false): Enables finger-specific grooves. **Note:** May reduce ergonomic comfort for other hand sizes.
-- `tiltangle` (default: 110): Handle tilt angle in degrees. Should be no less than 90.
-- `fn` (default: 64): Number of facets in the elliptical cross-section and vertical slices.
-- `halfrotate` (default: false): Rotates polygon vertices half of a segment around the ellipse.
-- `metacarpal_expansion` (default: 1.12): Expands metacarpal breadth in gripping position. **Range:** 1.10–1.15.
-- `groovedepth` (default: 0.6): Depth of grooves, used for creating textured grip.
-- `bottomcapscale` (default: 0.3): Scale factor for the bottom-most disc of the handle's base cap.
+Renders the handle body. The centre of the top surface is at the origin and
+the bottom, not counting the bottom cap, is `ergonomic_handle_height()` below
+it.
 
-## Print Settings
+<img src="assets/ergonomic_handle_v5_scad.png" alt="OpenSCAD Render" width="400">
 
-<img src="assets/erginomic_handle_v5_printer.png" alt="Handle on Printer Build Plate" width="400">
+| Parameter              | Default | Meaning |
+| ---------------------- | ------- | ------- |
+| `hand_length`          | 186     | Tip of the middle finger to the first wrist crease, in mm. |
+| `hand_width`           | 85      | Metacarpal breadth: width of the four fingers where they meet the palm, in mm. |
+| `flair`                | `true`  | Flare the top and bottom of the front edge for better pull force. `false` gives the handle as the study describes it. |
+| `bottomcapext`         | 0       | Bottom cap extension in mm; 0 is a flat bottom. Suggested: 3 to 8. |
+| `topext`               | 0       | Extend the curves upward by this many mm, above the origin. |
+| `groovespc`            | 0       | Spacing of grip grooves in mm; 0 is none. Suggested: 6 to 10. Ignored when `fingergroove` is on. |
+| `fingergroove`         | `false` | Add finger grooves. The handle then fits only the hand it was sized for and is uncomfortable for others. |
+| `tiltangle`            | 110     | Handle tilt in degrees. No less than 90. |
+| `fn`                   | 64      | Facets around the cross-section and, without finger grooves, vertical slices. With finger grooves there are always 128 slices. |
+| `halfrotate`           | `false` | Rotate the cross-section's vertices by half a segment. Useful for overlapping two low-facet handles into a texture. |
+| `metacarpal_expansion` | 1.12    | How much metacarpal breadth grows in a grip. Values outside 1.10 to 1.15 are clamped to that range, with a warning. |
+| `groovedepth`          | 0.6     | Depth of the grip grooves, in mm. |
+| `bottomcapscale`       | 0.3     | Scale of the last cross-section of the bottom cap. |
 
-When 3D printing the ergonomic handle, consider the following settings:
+### `ergonomic_handle_top_ellipse(...)`
 
-- **Printer Brand**: Compatible with Prusa I3 MK3S.
-- **Supports**: Not required if printed upside-down. Supports may be needed if printed right-side-up.
-- **Infill**: 15% gyroid for optimal strength and material usage.
-- **Orientation**: Print the handle upside-down to avoid the need for supports and ensure structural integrity.
+A 2D polygon matching the top surface of the handle, including `topext`. Takes
+`hand_length`, `hand_width`, `metacarpal_expansion`, `flair`, `fingergroove`,
+`topext`, `tiltangle`, `fn` and `halfrotate`, with the same defaults as
+`ergonomic_handle`. Pass the same values to both.
 
-**Notes:**
+### `ergonomic_handle_bottom_ellipse(...)`
 
-- The handle should be printed upside-down to minimize the need for supports.
-- Incorporate a top structure with sliding rails for additional parts to snap into place.
+A 2D polygon matching the bottom surface of the handle, not counting the
+bottom cap. Useful for matching something to a handle without a cap. Same
+parameters as the top ellipse, without `topext`.
 
-## License
+### `ergonomic_handle_height(hand_width, metacarpal_expansion)`
 
-This library is licensed under the Creative Commons - Attribution license (CC BY). You are free to share and adapt the material provided you give appropriate credit.
+The height of the handle body without extensions: `hand_width` times
+`metacarpal_expansion`, the latter clamped as above. Defaults to 85 and 1.12.
 
-## Attribution
+### `default_hand_length(female)` and `default_hand_width(female)`
 
-This project is based on the work of **Alex Matulich**, originally posted on [Thingiverse](https://www.thingiverse.com/thing:5330170) and detailed on his [blog](https://www.nablu.com/2022/03/whose-hands-are-biggest-you-may-be.html). All studies and data used in this library are cited and linked in the original blog article "Whose hands are biggest? You may be surprised."
+The average hand: 186 by 85 mm, or 171 by 76 mm with `female = true`.
 
-<img src="assets/erginomic_handle_v5_darius_alex.png" alt="Ergonomic Handle Design" width="400">
+## Hand sizes
 
-For more designs and information, visit Alex's [Thingiverse page](https://www.thingiverse.com/thing:5330170) or his [blog](https://www.nablu.com/2022/03/whose-hands-are-biggest-you-may-be.html).
+The defaults were calculated from journal data broken down by nationality:
+Bangladeshi, Czech, Filipino, German, central Indian, East Indian, Iranian,
+Korean, Jordanian, Mexican, Taiwanese, Turkish and Vietnamese. The average
+male hand is 186 mm long (range 173 to 198) and 85 mm broad (range 78 to 98).
+The average female hand is 76 mm broad (range 68 to 92), with lengths from 161
+to 180 mm. The average male size should also suit nearly all adult women and
+all children.
+
+## Examples
+
+- `examples/handle_no_grooves.scad`: a plain handle.
+- `examples/grooved_handle_with_extension.scad`: grip grooves, a top
+  extension, a bottom cap and a structure built on the top ellipse.
+- `examples/low_facet_handle_with_grooves.scad`: two low-facet handles
+  overlaid for texture.
+
+## Printing
+
+<img src="assets/ergonomic_handle_v5_printer.png" alt="Handle on Printer Build Plate" width="400">
+
+Print the handle upside-down and it needs no supports. Settings that have
+worked: a Prusa i3 MK3S with 15% gyroid infill.
+
+## Development
+
+With [just](https://just.systems/), OpenSCAD and Python 3 installed,
+`just test` renders the library, every example and every preset with OpenSCAD
+warnings treated as errors.
+
+## License and attribution
+
+Creative Commons Attribution 4.0 International. See [LICENSE](LICENSE).
+
+The design is by **Alex Matulich**, version 5.1 of May 2022, published on
+[Thingiverse](https://www.thingiverse.com/thing:5330170) and described on his
+[blog](https://www.nablu.com/2022/03/whose-hands-are-biggest-you-may-be.html).
+The header of `ergonomic_handle.scad` notes the changes made here in November 2026.
+
+<img src="assets/ergonomic_handle_v5_darius_alex.png" alt="Ergonomic Handle Design" width="400">
