@@ -1,9 +1,14 @@
 /*
  * Ergonomic handle
  * by Alex Matulich
- * Verson 5.1, May 2022
+ * Version 5.1, May 2022
  *
  * Revised and uploaded to GitHub for continued development as well as reference and visibility on December 5th, 2024.
+ *
+ * Changed in November 2026:
+ * - metacarpal_expansion outside 1.10-1.15 is clamped to that range, as the warning always said.
+ * - ergonomic_handle_height() defaults metacarpal_expansion to 1.12.
+ * - The top and bottom ellipse modules default to fingergroove = false, as ergonomic_handle() does.
  *
  */
 
@@ -102,7 +107,6 @@ module ergonomic_handle(hand_length = default_hand_length(), hand_width = defaul
     if (metacarpal_expansion < 1.10 || metacarpal_expansion > 1.15)
     {
         echo("WARNING: metacarpal_expansion must be between 1.10 and 1.15. Adjusting to fit the valid range.");
-        metacarpal_expansion = max(1.10, min(metacarpal_expansion, 1.15));
     }
     ehdcoeff = flair ? ehandle_coeff_fwdflair : ehandle_coeff_default;
     ecof = hand_length * ehdcoeff[0];                                  // scaled front profile coefficients
@@ -188,7 +192,7 @@ module polyhedron_stack(stack)
 
 // return polygon of top ellipse (including extension)
 module ergonomic_handle_top_ellipse(hand_length = default_hand_length(), hand_width = default_hand_width(),
-                                    metacarpal_expansion = 1.12, flair = true, fingergroove = true, topext = 0,
+                                    metacarpal_expansion = 1.12, flair = true, fingergroove = false, topext = 0,
                                     tiltangle = 110, fn = 64, halfrotate = false)
 {
     coeff = hand_length * (flair ? ehandle_coeff_fwdflair : ehandle_coeff_default);
@@ -202,7 +206,7 @@ module ergonomic_handle_top_ellipse(hand_length = default_hand_length(), hand_wi
 
 // return polygon of bottom ellipse (EXCLUDING bottom cap extension)
 module ergonomic_handle_bottom_ellipse(hand_length = default_hand_length(), hand_width = default_hand_width(),
-                                       metacarpal_expansion = 1.12, flair = true, fingergroove = true, tiltangle = 110,
+                                       metacarpal_expansion = 1.12, flair = true, fingergroove = false, tiltangle = 110,
                                        fn = 64, halfrotate = false)
 {
     coeff = hand_length * (flair ? ehandle_coeff_fwdflair : ehandle_coeff_default);
@@ -222,9 +226,12 @@ module ergonomic_handle_bottom_ellipse(hand_length = default_hand_length(), hand
 function default_hand_length(female = false) = female ? 171 : 186;
 function default_hand_width(female = false) = female ? 76 : 85;
 
+// metacarpal expansion limited to the 1.10-1.15 range the handle is designed for
+function clamp_metacarpal_expansion(metacarpal_expansion) = max(1.10, min(metacarpal_expansion, 1.15));
+
 // height of handle without extensions
-function ergonomic_handle_height(hand_width = default_hand_width(),
-                                 metacarpal_expansion) = hand_width * metacarpal_expansion;
+function ergonomic_handle_height(hand_width = default_hand_width(), metacarpal_expansion = 1.12) =
+    hand_width * clamp_metacarpal_expansion(metacarpal_expansion);
 
 // polynomial evaluation at x, given any number of coefficents c[0]...c[degree]
 // usage: y = polynomial(coefficients, x);
