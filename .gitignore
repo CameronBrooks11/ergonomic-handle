@@ -1,0 +1,10 @@
+# Exported models
+*.stl
+*.3mf
+*.off
+*.amf
+
+# Editor and OS files
+*~
+.DS_Store
+Thumbs.db
