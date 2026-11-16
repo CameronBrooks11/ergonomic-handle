@@ -1,0 +1,3 @@
+title: ergonomic-handle
+description: An OpenSCAD handle that spreads hand contact pressure evenly, scaled to any hand, from Alex Matulich's design
+models: ergonomic_handle.scad
