@@ -115,7 +115,9 @@ worked: a Prusa i3 MK3S with 15% gyroid infill.
 
 With [just](https://just.systems/), OpenSCAD and Python 3 installed,
 `just test` renders the library, every example and every preset with OpenSCAD
-warnings treated as errors.
+warnings treated as errors, and checks the handle's height for several hand
+sizes and extensions. `just fmt` formats the `.scad` files with topiary 0.8.0,
+and `just check` fails if one is not formatted.
 
 ## License and attribution
 
