@@ -9,6 +9,7 @@
  * - metacarpal_expansion outside 1.10-1.15 is clamped to that range, as the warning always said.
  * - ergonomic_handle_height() defaults metacarpal_expansion to 1.12.
  * - The top and bottom ellipse modules default to fingergroove = false, as ergonomic_handle() does.
+ * - Two commented-out alternatives, a four-finger groove split and a thumb special case, are cut.
  *
  */
 
@@ -91,8 +92,6 @@ ehandle_coeff_fwdflair = [
 thumbfrac = 0.231959853553746; // thumb fraction of hand width
 forefingerfrac = 0.200542328752527; // forefinger fraction of hand width
 
-/* 0.261856394119384, 0.262553059392204, 0.251706774167261, 0.22388377232115,0.22388377232115
-four fingers only - doesn't work well */
 fingwidfrac = [
     // thumb plus four fingers
     0.5 * (thumbfrac + forefingerfrac),
@@ -323,8 +322,6 @@ function trochoid(
         interpb = zfrac * (nextb - b) + b,
         y = interpb + interpb * cos(thetadeg)
     )
-    /*(fi==0 && thetadeg<180) ? 0.01  // special case for thumb
-                                     : */
     1.1 * y + 0.2;
 
 // for a give z elevation, return the corresponding finger index 0-4
